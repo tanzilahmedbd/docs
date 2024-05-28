@@ -6,7 +6,6 @@ intro: 'View, sort, and filter security alerts and coverage information from acr
 product: '{% data reusables.gated-features.security-overview %}'
 versions:
   fpt: '*'
-  ghae: '*'
   ghes: '*'
   ghec: '*'
 topics:
@@ -14,7 +13,7 @@ topics:
   - Advanced Security
 children:
   - /about-security-overview
-  - /viewing-security-insights-for-your-organization
+  - /viewing-security-insights
   - /assessing-adoption-code-security
   - /assessing-code-security-risk
   - /filtering-alerts-in-security-overview

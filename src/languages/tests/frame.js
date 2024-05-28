@@ -1,13 +1,14 @@
+import { describe, expect, test, vi } from 'vitest'
+
 import { languageKeys } from '#src/languages/lib/languages.js'
 import { blockIndex } from '#src/frame/middleware/block-robots.js'
 import { get, getDOMCached as getDOM } from '#src/tests/helpers/e2etest.js'
 import Page from '#src/frame/lib/page.js'
-import { jest } from '@jest/globals'
 
 const langs = languageKeys.filter((lang) => lang !== 'en')
 
 describe('frame', () => {
-  jest.setTimeout(60 * 1000)
+  vi.setConfig({ testTimeout: 60 * 1000 })
 
   test.each(langs)('allows crawling of %s pages', async (lang) => {
     expect(blockIndex(`/${lang}/articles/verifying-your-email-address`)).toBe(false)
@@ -86,11 +87,11 @@ describe('release notes', () => {
   // Return an array of tuples for each language and each first version
   // per plan. E.g. ...
   //   [
+  //      ['ja', 'enterprise-server@3.9'],
+  //      ['pt', 'enterprise-server@3.9'],
+  //      ...
   //      ['ja', 'enterprise-server@3.8'],
   //      ['pt', 'enterprise-server@3.8'],
-  //      ...
-  //      ['ja', 'github-ae@latest'],
-  //      ['pt', 'github-ae@latest'],
   //      ...
   //
   // This is useful because if we test every single individual version of

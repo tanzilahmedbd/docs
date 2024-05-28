@@ -8,7 +8,6 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 shortTitle: Basic formatting syntax
 ---
@@ -74,14 +73,14 @@ Use `git status` to list all new or modified files that haven't yet been committ
 
 To format code or text into its own distinct block, use triple backticks.
 
-<pre>
+````markdown
 Some basic Git commands are:
 ```
 git status
 git add
 git commit
 ```
-</pre>
+````
 
 ![Screenshot of rendered GitHub Markdown showing a code block. The words "git status," "git add," and "git commit" appear in a fixed-width typeface, highlighted in light gray.](/assets/images/help/writing/code-block-rendered.png)
 
@@ -200,8 +199,8 @@ To order your list, precede each line with a number.
 
 ```markdown
 1. James Madison
-1. James Monroe
-1. John Quincy Adams
+2. James Monroe
+3. John Quincy Adams
 ```
 
 ![Screenshot of rendered GitHub Markdown showing a numbered list of the names of the fourth, fifth, and sixth American presidents.](/assets/images/help/writing/ordered-list-rendered.png)
@@ -251,8 +250,6 @@ You can create multiple levels of nested lists using the same method. For exampl
 
 For more examples, see the [GitHub Flavored Markdown Spec](https://github.github.com/gfm/#example-265).
 
-{% ifversion task-lists-v1 %}
-
 ## Task lists
 
 {% data reusables.repositories.task-list-markdown %}
@@ -262,7 +259,6 @@ If a task list item description begins with a parenthesis, you'll need to escape
 `- [ ] \(Optional) Open a followup issue`
 
 For more information, see "[AUTOTITLE](/get-started/writing-on-github/working-with-advanced-formatting/about-task-lists)."
-{% endif %}
 
 ## Mentioning people and teams
 
@@ -298,7 +294,7 @@ For more information, see "[AUTOTITLE](/get-started/writing-on-github/working-wi
 
 You can upload assets like images by dragging and dropping, selecting from a file browser, or pasting. You can upload assets to issues, pull requests, comments, and `.md` files in your repository.
 
-## Using emoji
+## Using emojis
 
 You can add emoji to your writing by typing `:EMOJICODE:`, a colon followed by the name of the emoji.
 
@@ -377,9 +373,9 @@ Here are the rendered alerts:
 
 You can tell {% data variables.product.product_name %} to hide content from the rendered Markdown by placing the content in an HTML comment.
 
-<pre>
-&lt;!-- This content will not appear in the rendered Markdown --&gt;
-</pre>
+```text
+<!-- This content will not appear in the rendered Markdown -->
+```
 
 ## Ignoring Markdown formatting
 

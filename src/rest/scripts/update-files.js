@@ -65,12 +65,14 @@ program
 
 const { versions, includeUnpublished, includeDeprecated, next, output, sourceRepo } = program.opts()
 
+const sourceRepoDirectory = sourceRepo === 'github' ? GITHUB_REP_DIR : REST_API_DESCRIPTION_ROOT
+
 main()
 
 async function main() {
   const pipelines = Array.isArray(output) ? output : [output]
   await validateInputParameters()
-  rimraf.sync(TEMP_OPENAPI_DIR)
+  await rimraf(TEMP_OPENAPI_DIR)
   await mkdirp(TEMP_OPENAPI_DIR)
 
   // If the source repo is github, this is the local development workflow
@@ -95,7 +97,7 @@ async function main() {
     await copyFile(file, path.join(TEMP_OPENAPI_DIR, baseName))
   }
 
-  rimraf.sync(TEMP_BUNDLED_OPENAPI_DIR)
+  await rimraf(TEMP_BUNDLED_OPENAPI_DIR)
   await normalizeDataVersionNames(TEMP_OPENAPI_DIR)
 
   // The REST_API_DESCRIPTION_ROOT repo contains all current and
@@ -104,19 +106,20 @@ async function main() {
   if (sourceRepo === REST_API_DESCRIPTION_ROOT) {
     const derefDir = await readdir(TEMP_OPENAPI_DIR)
     const currentOpenApiVersions = Object.values(allVersions).map((elem) => elem.openApiVersionName)
-    derefDir.forEach((schema) => {
+
+    for (const schema of derefDir) {
       // if the schema does not start with a current version name, delete it
       if (!currentOpenApiVersions.find((version) => schema.startsWith(version))) {
-        rimraf.sync(path.join(TEMP_OPENAPI_DIR, schema))
+        await rimraf(path.join(TEMP_OPENAPI_DIR, schema))
       }
-    })
+    }
   }
   const derefFiles = await readdir(TEMP_OPENAPI_DIR)
   const { restSchemas, webhookSchemas } = await getOpenApiSchemaFiles(derefFiles)
 
   if (pipelines.includes('rest')) {
     console.log(`\n▶️  Generating REST data files...\n`)
-    await syncRestData(TEMP_OPENAPI_DIR, restSchemas)
+    await syncRestData(TEMP_OPENAPI_DIR, restSchemas, sourceRepoDirectory)
   }
 
   if (pipelines.includes('webhooks')) {
@@ -126,11 +129,7 @@ async function main() {
 
   if (pipelines.includes('github-apps')) {
     console.log(`\n▶️  Generating GitHub Apps data files...\n`)
-    await syncGitHubAppsData(
-      TEMP_OPENAPI_DIR,
-      restSchemas,
-      sourceRepo === 'github' && GITHUB_REP_DIR,
-    )
+    await syncGitHubAppsData(TEMP_OPENAPI_DIR, restSchemas, sourceRepoDirectory)
   }
 
   if (pipelines.includes('rest-redirects')) {
@@ -176,7 +175,7 @@ async function getBundledFiles() {
   }
 
   // Create a tmp directory to store schema files generated from github/github
-  rimraf.sync(TEMP_OPENAPI_DIR)
+  await rimraf(TEMP_OPENAPI_DIR)
   await mkdirp(TEMP_BUNDLED_OPENAPI_DIR)
 
   console.log(
@@ -230,7 +229,6 @@ async function validateInputParameters() {
   }
 
   // Check that the source repo exists.
-  const sourceRepoDirectory = sourceRepo === 'github' ? GITHUB_REP_DIR : REST_API_DESCRIPTION_ROOT
   if (!existsSync(sourceRepoDirectory)) {
     const errorMsg =
       sourceRepo === 'github'

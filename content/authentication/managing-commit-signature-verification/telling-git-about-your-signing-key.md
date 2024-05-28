@@ -1,6 +1,6 @@
 ---
 title: Telling Git about your signing key
-intro: 'To sign commits locally, you need to inform Git that there''s a GPG{% ifversion ssh-commit-verification %}, SSH,{% endif %} or X.509 key you''d like to use.'
+intro: 'To sign commits locally, you need to inform Git that there''s a GPG, SSH, or X.509 key you''d like to use.'
 redirect_from:
   - /articles/telling-git-about-your-gpg-key
   - /articles/telling-git-about-your-signing-key
@@ -9,7 +9,6 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Identity
@@ -21,7 +20,7 @@ shortTitle: Tell Git about your signing key
 
 {% mac %}
 
-If you're using a GPG key that matches your committer identity and your verified email address associated with your account on {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.location.product_location %}{% endif %}, then you can begin signing commits and signing tags.
+If you're using a GPG key that matches your committer identity and your verified email address associated with your account on {% data variables.location.product_location %}, then you can begin signing commits and signing tags.
 
 {% note %}
 
@@ -63,7 +62,7 @@ If you have multiple GPG keys, you need to tell Git which one to use.
 
 {% windows %}
 
-If you're using a GPG key that matches your committer identity and your verified email address associated with your account on {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.location.product_location %}{% endif %}, then you can begin signing commits and signing tags.
+If you're using a GPG key that matches your committer identity and your verified email address associated with your account on {% data variables.location.product_location %}, then you can begin signing commits and signing tags.
 
 {% note %}
 
@@ -84,7 +83,7 @@ If you have multiple GPG keys, you need to tell Git which one to use.
 
 {% linux %}
 
-If you're using a GPG key that matches your committer identity and your verified email address associated with your account on {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.location.product_location %}{% endif %}, then you can begin signing commits and signing tags.
+If you're using a GPG key that matches your committer identity and your verified email address associated with your account on {% data variables.location.product_location %}, then you can begin signing commits and signing tags.
 
 {% note %}
 
@@ -107,7 +106,6 @@ If you have multiple GPG keys, you need to tell Git which one to use.
    ```
 
 {% endlinux %}
-{% ifversion ssh-commit-verification %}
 
 ## Telling Git about your SSH key
 
@@ -119,9 +117,17 @@ You can use an existing SSH key to sign commits and tags, or generate a new one 
 {% data reusables.gpg.configure-ssh-signing %}
 {% data reusables.gpg.paste-ssh-public-key %}
 
-{% endif %}
+{% windows %}
 
 {% data reusables.gpg.x-509-key %}
+
+{% endwindows %}
+
+{% mac %}
+
+{% data reusables.gpg.x-509-key %}
+
+{% endmac %}
 
 ## Further reading
 

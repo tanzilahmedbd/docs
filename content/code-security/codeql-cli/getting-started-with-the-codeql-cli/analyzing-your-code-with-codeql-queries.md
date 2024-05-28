@@ -6,7 +6,6 @@ shortTitle: Analyzing code
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Advanced Security
@@ -66,11 +65,11 @@ You must specify `<database>`, `--format`, and `--output`. You can specify addit
 |--------|:--------:|-----|
 | `<database>` | {% octicon "check" aria-label="Required" %} | Specify the path for the directory that contains the {% data variables.product.prodname_codeql %} database to analyze. |
 | `<packs,queries>` | {% octicon "x" aria-label="Optional" %} | Specify {% data variables.product.prodname_codeql %} packs or queries to run. To run the standard queries used for {% data variables.product.prodname_code_scanning %}, omit this parameter. To see the other query suites included in the {% data variables.product.prodname_codeql_cli %} bundle, look in `/<extraction-root>/qlpacks/codeql/<language>-queries/codeql-suites`. For information about creating your own query suite, see [AUTOTITLE](/code-security/codeql-cli/using-the-advanced-functionality-of-the-codeql-cli/creating-codeql-query-suites) in the documentation for the {% data variables.product.prodname_codeql_cli %}.
-| <code><span style="white-space: nowrap;">--format</span></code> | {% octicon "check" aria-label="Required" %} | Specify the format for the results file generated during analysis. A number of different formats are supported, including CSV, [SARIF](https://codeql.github.com/docs/codeql-overview/codeql-glossary/#sarif-file), and graph formats. For upload to {% data variables.product.company_short %} this should be: {% ifversion fpt or ghae or ghec %}`sarif-latest`{% else %}`sarifv2.1.0`{% endif %}. For more information, see "[AUTOTITLE](/code-security/code-scanning/integrating-with-code-scanning/sarif-support-for-code-scanning)."
+| <code><span style="white-space: nowrap;">--format</span></code> | {% octicon "check" aria-label="Required" %} | Specify the format for the results file generated during analysis. A number of different formats are supported, including CSV, [SARIF](https://codeql.github.com/docs/codeql-overview/codeql-glossary/#sarif-file), and graph formats. For upload to {% data variables.product.company_short %} this should be: {% ifversion fpt or ghec %}`sarif-latest`{% else %}`sarifv2.1.0`{% endif %}. For more information, see "[AUTOTITLE](/code-security/code-scanning/integrating-with-code-scanning/sarif-support-for-code-scanning)."
 | <code><span style="white-space: nowrap;">--output</span></code> | {% octicon "check" aria-label="Required" %} | Specify the location where you want to save the SARIF results file, including the desired filename with the `.sarif` extension.
 | <code><span style="white-space: nowrap;">--sarif-category</span></code> | {% octicon "question" aria-label="Required with multiple results sets" %} | Optional for single database analysis. Required to define the language when you analyze multiple databases for a single commit in a repository.<br><br>Specify a category to include in the SARIF results file for this analysis. A category is used to distinguish multiple analyses for the same tool and commit, but performed on different languages or different parts of the code.|{% ifversion code-scanning-tool-status-page %}
 | <code><span style="white-space: nowrap;">--sarif-add-baseline-file-info</span></code> | {% octicon "x" aria-label="Optional" %} | **Recommended.** Use to submit file coverage information to the {% data variables.code-scanning.tool_status_page %}. For more information, see "[AUTOTITLE](/code-security/code-scanning/managing-your-code-scanning-configuration/about-the-tool-status-page#how-codeql-defines-scanned-files)." | {% endif %}
-| <code><span style="white-space: nowrap;">--sarif-add-query-help</span></code> | {% octicon "x" aria-label="Optional" %} | Use if you want to include any available markdown-rendered query help for custom queries used in your analysis. Any query help for custom queries included in the SARIF output will be displayed in the code scanning UI if the relevant query generates an alert. For more information, see "[AUTOTITLE](/code-security/codeql-cli/using-the-advanced-functionality-of-the-codeql-cli/using-custom-queries-with-the-codeql-cli#including-query-help-for-custom-codeql-queries-in-sarif-files)."{% ifversion codeql-packs %}
+| <code><span style="white-space: nowrap;">--sarif-include-query-help</span></code> | {% octicon "x" aria-label="Optional" %} | Specify whether to include query help in the SARIF output. One of: `always`: Include query help for all queries.  `custom_queries_only` (default): Include query help only for custom queries, that is, queries in query packs which are not of the form `codeql/<lang>-queries`.  `never`: Do not include query help for any queries. Any query help for custom queries included in the SARIF output will be displayed in any code scanning alerts for the query. For more information, see "[AUTOTITLE](/code-security/codeql-cli/using-the-advanced-functionality-of-the-codeql-cli/using-custom-queries-with-the-codeql-cli#including-query-help-for-custom-codeql-queries-in-sarif-files)."{% ifversion codeql-packs %}
 | `<packs>` | {% octicon "x" aria-label="Optional" %} | Use if you want to include {% data variables.product.prodname_codeql %} query packs in your analysis. For more information, see "[Downloading and using {% data variables.product.prodname_codeql %} packs](/code-security/codeql-cli/getting-started-with-the-codeql-cli/customizing-analysis-with-codeql-packs#downloading-and-using-codeql-query-packs)."
 | <code><span style="white-space: nowrap;">--download</span></code> | {% octicon "x" aria-label="Optional" %}  | Use if some of your {% data variables.product.prodname_codeql %} query packs are not yet on disk and need to be downloaded before running queries.{% endif %}
 | <code><span style="white-space: nowrap;">--threads</span></code> | {% octicon "x" aria-label="Optional" %}  | Use if you want to use more than one thread to run queries. The default value is `1`. You can specify more threads to speed up query execution. To set the number of threads to the number of logical processors, specify `0`.
@@ -99,7 +98,7 @@ This example analyzes a {% data variables.product.prodname_codeql %} database st
 ```shell
 $ codeql database analyze /codeql-dbs/example-repo \
     javascript-code-scanning.qls --sarif-category={% ifversion codeql-language-identifiers-311 %}javascript-typescript{% else %}javascript{% endif %} \
-    --format={% ifversion fpt or ghae or ghec %}sarif-latest{% else %}sarifv2.1.0{% endif %} --output=/temp/example-repo-js.sarif
+    --format={% ifversion fpt or ghec %}sarif-latest{% else %}sarifv2.1.0{% endif %} --output=/temp/example-repo-js.sarif
 
 > Running queries.
 > Compiling query plan for /codeql-home/codeql/qlpacks/codeql-javascript/AngularJS/DisablingSce.ql.
@@ -119,7 +118,7 @@ To include file coverage information with your {% data variables.product.prodnam
 ```shell
 $ codeql database analyze /codeql-dbs/example-repo \
     javascript-code-scanning.qls --sarif-category={% ifversion codeql-language-identifiers-311 %}javascript-typescript{% else %}javascript{% endif %} \
-    --sarif-add-baseline-file-info \ --format={% ifversion fpt or ghae or ghec %}sarif-latest{% else %}sarifv2.1.0{% endif %} \
+    --sarif-add-baseline-file-info \ --format={% ifversion fpt or ghec %}sarif-latest{% else %}sarifv2.1.0{% endif %} \
     --output=/temp/example-repo-js.sarif
 ```
 
@@ -133,16 +132,7 @@ The following examples show how to run `database analyze` using {% data variable
 
 ### Running a {% data variables.product.prodname_codeql %} query pack
 
-{% note %}
-
-**Note**
-
-The {% data variables.product.prodname_codeql %} package management functionality, including {% data variables.product.prodname_codeql %} packs, is currently available as a beta release and is subject to change. During the beta release, {% data variables.product.prodname_codeql %} packs are available only using {% data variables.product.prodname_registry %} - the {% data variables.product.prodname_dotcom %} {% data variables.product.prodname_container_registry %}. To use this beta functionality, install the latest version of the {% data variables.product.prodname_codeql_cli %} bundle from: https://github.com/github/codeql-action/releases.
-
-{% endnote %}
-
-To run an existing {% data variables.product.prodname_codeql %} query pack from the {% data variables.product.prodname_dotcom %} {% data variables.product.prodname_container_registry %}, you can specify one or more
-pack names:
+To run an existing {% data variables.product.prodname_codeql %} query pack from the {% data variables.product.prodname_dotcom %} {% data variables.product.prodname_container_registry %}, you can specify one or more pack names:
 
 ```shell
 codeql database analyze <database> microsoft/coding-standards@1.0.0 github/security-queries --format=sarifv2.1.0 --output=query-results.sarif --download
@@ -297,13 +287,13 @@ For more information, see "[AUTOTITLE](/code-security/codeql-cli/using-the-advan
 
 For information about creating custom query suites, see "[AUTOTITLE](/code-security/codeql-cli/using-the-advanced-functionality-of-the-codeql-cli/creating-codeql-query-suites)."
 
-{% ifversion codeql-cli-threat-models-java %}
+{% ifversion codeql-cli-threat-models %}
 
 ### Including model packs to add potential sources of tainted data
 
 {% data reusables.code-scanning.beta-threat-models-cli %}
 
-You can configure threat models in a {% data variables.product.prodname_code_scanning %} analysis. For more information, see "[Customizing library models for Java and Kotlin](https://codeql.github.com/docs/codeql-language-guides/customizing-library-models-for-java-and-kotlin)" in the {% data variables.product.prodname_codeql %} documentation.
+You can configure threat models in a {% data variables.product.prodname_code_scanning %} analysis. For more information, see "[Threat models for Java and Kotlin](https://codeql.github.com/docs/codeql-language-guides/customizing-library-models-for-java-and-kotlin/#threat-models)" and "[Threat models for C#](https://codeql.github.com/docs/codeql-language-guides/customizing-library-models-for-csharp/#threat-models)" in the {% data variables.product.prodname_codeql %} documentation.
 
 ```shell
 $ codeql database analyze /codeql-dbs/my-company --format=sarif-latest \

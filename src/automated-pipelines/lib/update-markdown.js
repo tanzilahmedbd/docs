@@ -139,7 +139,7 @@ async function updateDirectory(
   const initialDirectoryListing = await getDirectoryInfo(directory)
   // If there are no children on disk, remove the directory
   if (initialDirectoryListing.directoryContents.length === 0 && !rootDirectoryOnly) {
-    rimraf(directory)
+    await rimraf(directory)
     return
   }
 
@@ -330,15 +330,13 @@ async function getIndexFileVersions(directory, files) {
   'enterprise-server@3.4',
   'enterprise-server@3.5',
   'enterprise-server@3.6',
-  'enterprise-server@3.7',
-  'github-ae@latest'
+  'enterprise-server@3.7'
 ]
 and returns the frontmatter equivalent JSON:
-{ 
+{
   fpt: '*',
-  ghae: '*',
-  ghec: '*', 
-  ghes: '*' 
+  ghec: '*',
+  ghes: '*'
 }
 */
 export async function convertVersionsToFrontmatter(versions) {

@@ -8,7 +8,9 @@ redirect_from:
   - /issues/tracking-your-work-with-issues/creating-issues/about-task-lists
   - /issues/tracking-your-work-with-issues/about-task-lists
 versions:
-  feature: task-lists-v1
+  fpt: '*'
+  ghes: '*'
+  ghec: '*'
 topics:
   - Pull requests
   - Issues
@@ -17,7 +19,7 @@ topics:
 {% ifversion projects-v2-tasklists %}
 {% note %}
 
-**Note:** For more information about the new iteration of tasklists, which is currently in beta, see "[AUTOTITLE](/issues/tracking-your-work-with-issues/about-tasklists)."
+**Note:** For more information about the new iteration of tasklists, which is currently in beta, see "[AUTOTITLE](/issues/managing-your-tasks-with-tasklists/creating-a-tasklist)."
 
 {% endnote %}
 {% endif %}

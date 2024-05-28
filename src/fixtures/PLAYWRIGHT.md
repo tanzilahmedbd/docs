@@ -2,13 +2,13 @@
 
 There are currently 3 general automated tests:
 
-1. `jest` tests against real English content (and some code)
-1. `jest` tests against fixture content
+1. `vitest` tests against real English content (and some code)
+1. `vitest` tests against fixture content
 1. `playwright` tests against fixture content (What this document is about!)
 
 ## Quickstart
 
-Just like with regular `jest` tests, if you haven't already done so...
+Just like with regular `vitest` tests, if you haven't already done so...
 
 ```shell
 npm run build
@@ -17,8 +17,12 @@ npm run build
 Now, to run all the tests:
 
 ```shell
-npm run playwright-test
+npm run playwright-test -- playwright-rendering
 ```
+
+The first argument, `playwright-rendering` here, is because we have multiple
+test suites for headless testing. Some that test local dev, some that
+test for accessibility, and some that test on fixtures.
 
 That command will automatically start a server (on `localhost:4000`) for
 the duration of test suite. It then finds all `tests/**/*.spec.ts`
@@ -40,18 +44,18 @@ to your assertions.
 
 ### What to test
 
-Beyond some basic happy path tests, **only test what `jest` can't test**.
+Beyond some basic happy path tests, **only test what `vitest` can't test**.
 In particular this means client-side JavaScript interactions. For example,
-`jest` can fetch the HTML over HTTP and assert against the `cheerio` parsed
+`vitest` can fetch the HTML over HTTP and assert against the `cheerio` parsed
 HTML, but it can't test what happens when you click a client-side routing
 link that triggers some sort of user agent interaction.
 
-`jest` is always faster. Playwright tests can test things like displaying
+`vitest` is always faster. Playwright tests can test things like displaying
 different things depending on cookies or `localStorage`. Playwright tests
 can test the visual presence of something. For example, if something
 like `<div style="display:none">Text here</div>` is in the DOM only
 Playwright can understand that it's not actually present in the page since
-`jest` and Cheerio can't understand CSS.
+`vitest` and Cheerio can't understand CSS.
 
 Think of your headless tests as "What would a human QA person do?"
 The imaginary QA person can be you. If there's something you find yourself
@@ -228,3 +232,32 @@ documentation how to do things like locators and/or assertions.
 - When you use the codegen, it's clever in that it can attach to `data-testid`
 nodes in your DOM. That's a good thing. If it's unable to do that,
 consider going into the React code and add some more.
+
+## Slow tests and patience
+
+By default the timeouts for running tests and for assertions are set up
+to be quite short. In CI, they're by default quite long. The reason for
+a lesser patience is for rapid development and the fact that if something
+times out, in local dev, it's usually not because of a slow computer but
+because of an incorrect test or assertion.
+
+To increase the patience consider setting, for example:
+
+```sh
+export PLAYWRIGHT_TIMEOUT=20000  # 20 seconds
+export PLAYWRIGHT_EXPECT_TIMEOUT=4000 # 4 seconds
+```
+
+You can also get the default patience settings as is used in CI by running
+as if it was run in CI:
+
+```sh
+CI=1 npm run playwright-test -- playwright-rendering
+```
+
+Note, that with `CI` set to a truthy value, it will also default to
+using exactly 1 worker. To counter that, you can use:
+
+```sh
+PLAYWRIGHT_WORKERS=4 CI=1 npm run playwright-test -- playwright-rendering
+```

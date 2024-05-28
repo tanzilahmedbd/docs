@@ -7,6 +7,7 @@ versions:
   ghec: '*'
 topics:
   - Profiles
+permissions: 'Profile READMEs are not available to {% data variables.enterprise.prodname_managed_users %}.'
 redirect_from:
   - /github/setting-up-and-managing-your-github-profile/managing-your-profile-readme
   - /github/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme
@@ -14,7 +15,7 @@ shortTitle: Your profile README
 ---
 ## About your profile README
 
-You can share information about yourself with the community on {% data variables.location.product_location %} by creating a profile README. {% data variables.product.prodname_dotcom %} shows your profile README at the top of your profile page.
+You can share information about yourself with the community on {% data variables.product.prodname_dotcom %} by creating a profile README. {% data variables.product.prodname_dotcom %} shows your profile README at the top of your profile page.
 
 You decide what information to include in your profile README, so you have full control over how you present yourself on {% data variables.product.prodname_dotcom %}. Here are some examples of information that visitors may find interesting, fun, or useful in your profile README.
 
@@ -37,18 +38,13 @@ You can format text and include emoji, images, and GIFs in your profile README b
 
 {% note %}
 
-**Note**: If you created a public repository with the same name as your username before July 2020, {% data variables.product.prodname_dotcom %} won't automatically show the repository's README on your profile. You can manually share the repository's README to your profile by going to the repository on {% data variables.product.prodname_dotcom_the_website %} and clicking **Share to profile**.
+**Note**: If you created a public repository with the same name as your username before July 2020, {% data variables.product.prodname_dotcom %} won't automatically show the repository's README on your profile. You can manually share the repository's README to your profile by going to the repository on {% data variables.product.prodname_dotcom %} and clicking **Share to profile**.
 
 {% endnote %}
 
 ## Adding a profile README
 
-{% data reusables.repositories.create_new %}
-1. Under "Repository name", type a repository name that matches your {% data variables.product.prodname_dotcom %} username. For example, if your username is "octocat", the repository name must be "octocat".
-1. Optionally, in the "Description" field, type a description of your repository. For example, "My personal repository."
-1. Select **Public**.
-{% data reusables.repositories.initialize-with-readme %}
-{% data reusables.repositories.create-repo %}
+{% data reusables.profile.create-profile-readme %}
 1. Above the right sidebar, click **Edit README**.
 
   The generated README file is pre-populated with a template to give you some inspiration for your profile README.
@@ -67,4 +63,8 @@ The method you choose depends upon your needs, but if you're unsure, we recommen
 
 ## Further reading
 
-- [About READMEs](/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
+- "[AUTOTITLE](/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)"
+- "[AUTOTITLE](/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile#adding-a-member-only-organization-profile-readme)"
+{%- ifversion enterprise-readme %}
+- "[AUTOTITLE](/admin/managing-your-enterprise-account/creating-a-readme-for-an-enterprise)"
+{%- endif %}

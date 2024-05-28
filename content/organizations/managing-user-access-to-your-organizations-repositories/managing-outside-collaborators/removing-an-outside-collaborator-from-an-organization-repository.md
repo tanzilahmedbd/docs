@@ -9,13 +9,14 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Organizations
   - Teams
 shortTitle: Remove collaborator
 ---
+
+{% data reusables.enterprise-managed.repo-collaborators-note %}
 
 {% ifversion fpt or ghec %}
 

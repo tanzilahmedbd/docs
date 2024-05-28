@@ -5,7 +5,6 @@ intro: 'Learn how to diagnose and resolve common errors for webhooks.'
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Webhooks
@@ -33,11 +32,11 @@ If you are not receiving the webhook deliveries that you expect, you should iden
 
 1. Look at the logs for your server. The information in the logs depends on the code that your server runs to handle webhook deliveries. To help you diagnose problems on your server, you may want to add additional log statements to your code.
 
-## Cannot have more than {% ifversion ghes or ghae %}250{% else %}20{% endif %} webhooks
+## Cannot have more than {% ifversion ghes %}250{% else %}20{% endif %} webhooks
 
-You can create up to {% ifversion ghes or ghae %}250{% else %}20{% endif %} {% ifversion ghec or ghes or ghae %} repository, organization, or global {% else %} repository or organization {% endif %}webhooks for each event type. If you attempt to create more, you will receive an error stating that you cannot have more than {% ifversion ghes or ghae %}250{% else %}20{% endif %} webhooks.
+You can create up to {% ifversion ghes %}250{% else %}20{% endif %} {% ifversion ghec or ghes %} repository, organization, or global {% else %} repository or organization {% endif %}webhooks for each event type. If you attempt to create more, you will receive an error stating that you cannot have more than {% ifversion ghes %}250{% else %}20{% endif %} webhooks.
 
-If you require more than {% ifversion ghes or ghae %}250{% else %}20{% endif %} webhooks, you can run a proxy that receives webhooks from {% data variables.product.company_short %} and forwards them to an unlimited number of destination URLs.
+If you require more than {% ifversion ghes %}250{% else %}20{% endif %} webhooks, you can run a proxy that receives webhooks from {% data variables.product.company_short %} and forwards them to an unlimited number of destination URLs.
 
 ## URL host localhost is not supported
 
@@ -89,6 +88,14 @@ You should configure your server to return a 2xx status. If your server returns 
 ## Webhook deliveries are not immediate
 
 Webhook deliveries can take a few minutes to be delivered and to appear in the recent deliveries log. Before concluding that your webhook delivery failed, wait a few minutes and then check again.
+
+{% ifversion fpt or ghec %}
+
+If your account experiences a surge in webhook deliveries, {% data variables.product.company_short %} may temporarily throttle the rate of deliveries to your account. If your webhook deliveries are slowed down by GitHub, the `throttled_at` property for each affected delivery shows the timestamp when delivery was throttled. You can check for this using the REST API, see "[List deliveries for a repository webhook](/rest/repos/webhooks#list-deliveries-for-a-repository-webhook)."
+
+To avoid delays, subscribe only to the webhook events that are necessary for your account, reducing the frequency of deliveries. See “[AUTOTITLE](/webhooks/using-webhooks/best-practices-for-using-webhooks).”
+
+{% endif %}
 
 ## Failed signature verification
 

@@ -8,7 +8,7 @@ redirect_from:
   - /admin/user-management/managing-repositories-in-your-enterprise//migrating-to-internal-repositories
 permissions: Site administrators can migrate to internal repositories.
 versions:
-  ghes: '*'
+  ghes: '<3.10'
 type: how_to
 topics:
   - Enterprise
@@ -40,11 +40,11 @@ If you don't have private mode enabled, the migration script will have no effect
 ## Running the migration
 
 1. Connect to the administrative shell. For more information, see "[AUTOTITLE](/admin/configuration/configuring-your-enterprise/accessing-the-administrative-shell-ssh)."
-{% ifversion ghes or ghae %}
+{% ifversion ghes %}
 1. Run the migration command.
 
    ```shell
-   github-env bin/safe-ruby lib/github/transitions/20191210220630_convert_public_ghes_repos_to_internal.rb --verbose -w |  tee -a /tmp/convert_public_ghes_repos_to_internal.log
+   github-env bin/safe-ruby lib/github/transitions/20191210220630_convert_public_ghes_repos_to_internal.rb --verbose -w | tee -a /tmp/convert_public_ghes_repos_to_internal.log
    ```
 
 {% else %}

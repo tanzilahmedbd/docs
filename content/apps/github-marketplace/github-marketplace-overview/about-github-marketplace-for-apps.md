@@ -34,11 +34,19 @@ To publish apps with free plans, you only need to meet the general requirements 
 
 ### New to apps?
 
-If you're interested in creating an app for {% data variables.product.prodname_marketplace %}, but you're new to {% data variables.product.prodname_github_apps %} or {% data variables.product.prodname_oauth_apps %}, see "[AUTOTITLE](/apps/creating-github-apps)" or "[AUTOTITLE](/apps/oauth-apps/building-oauth-apps)."
+If you're interested in creating an app for {% data variables.product.prodname_marketplace %}, but you're new to {% data variables.product.prodname_github_apps %} or {% data variables.product.prodname_oauth_apps %}, see "[AUTOTITLE](/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps)" or "[AUTOTITLE](/apps/oauth-apps/building-oauth-apps)."
 
 ### {% data variables.product.prodname_github_apps %} vs. {% data variables.product.prodname_oauth_apps %}
 
 {% data reusables.marketplace.github_apps_preferred %}, although you can list both OAuth and {% data variables.product.prodname_github_apps %} in {% data variables.product.prodname_marketplace %}. For more information, see "[AUTOTITLE](/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps)" and "[AUTOTITLE](/apps/creating-github-apps/about-creating-github-apps/migrating-oauth-apps-to-github-apps)."
+
+### {% data variables.product.prodname_copilot_extensions %}
+
+{% data reusables.copilot.copilot-extensions.beta-note %}
+
+{% data reusables.copilot.copilot-extensions.copilot-extensions-intro %}
+
+To learn more about {% data variables.product.prodname_copilot_extensions_short %}, see "[AUTOTITLE](/copilot/github-copilot-chat/github-copilot-extensions/about-github-copilot-extensions)."
 
 ## Publishing an app to {% data variables.product.prodname_marketplace %} overview
 

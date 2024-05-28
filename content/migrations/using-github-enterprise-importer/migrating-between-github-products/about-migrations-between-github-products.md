@@ -22,20 +22,20 @@ To migrate from {% data variables.product.prodname_ghe_server %} (GHES), you mus
 
 Item | GHES 3.4.1+ | GHES 3.5.0+ |
 ---- | ---------- | ---------- |
-Git source (including commit history) | **X** | **X** |
-Pull requests | **X** | **X** |
-Issues | **X** | **X** |
-Milestones | **X** | **X** |
-Wikis | **X** | **X** |
-Projects (classic) at the repository level | **X** | **X** |
-{% data variables.product.prodname_actions %} workflows | **X** | **X** |
-Commit comments | **X** | **X** |
-Active webhooks | **X** | **X** |
-Branch protections | **X** | **X** |
-{% data variables.product.prodname_pages %} settings | **X** | **X** |
-User history for the above data | **X** | **X** |
-Attachments (see "[AUTOTITLE](/get-started/writing-on-github/working-with-advanced-formatting/attaching-files)") | **X** | **X** |
-Releases | | **X** |
+Git source (including commit history) | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Pull requests | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Issues | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Milestones | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Wikis | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Projects (classic) at the repository level | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+{% data variables.product.prodname_actions %} workflows | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Commit comments | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Active webhooks | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Branch protections | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+{% data variables.product.prodname_pages %} settings | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+User history for the above data | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Attachments (see "[AUTOTITLE](/get-started/writing-on-github/working-with-advanced-formatting/attaching-files)") | {% octicon "check" aria-label="Can be migrated" %}  | {% octicon "check" aria-label="Can be migrated" %}  |
+Releases | {% octicon "x" aria-label="Cannot be migrated" %} | {% octicon "check" aria-label="Can be migrated" %}  |
 
 Different size limits per repository apply depending on your GHES version.
 
@@ -43,6 +43,10 @@ Limit | GHES <3.8.0 | GHES 3.8.0+ |
 ----- | ----------- | ----------- |
 Git source | 2GB | 10GB
 Metadata | 2GB | 10GB
+
+### Data that is not migrated
+
+Currently, the following data is **not** migrated.
 
 {% data reusables.enterprise-migration-tool.data-not-migrated %}
 - Teams
@@ -107,6 +111,11 @@ When you migrate a repository, either directly or as part of an organization mig
 - User history for the above data
 - Attachments (see "[AUTOTITLE](/get-started/writing-on-github/working-with-advanced-formatting/attaching-files)")
 
+### Data that is not migrated
+
+Currently, the following data is **not** migrated.
+
+- {% data variables.product.prodname_codespaces %} secrets
 {% data reusables.enterprise-migration-tool.data-not-migrated %}
 - User access to the repository
 

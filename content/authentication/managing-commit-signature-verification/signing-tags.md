@@ -1,6 +1,6 @@
 ---
 title: Signing tags
-intro: 'You can sign tags locally using GPG{% ifversion ssh-commit-verification %}, SSH,{% endif %} or S/MIME.'
+intro: 'You can sign tags locally using GPG, SSH, or S/MIME.'
 redirect_from:
   - /articles/signing-tags-using-gpg
   - /articles/signing-tags
@@ -9,7 +9,6 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Identity

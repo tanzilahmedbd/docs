@@ -9,7 +9,6 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Secret scanning
@@ -28,6 +27,7 @@ children:
   - /enabling-ai-powered-generic-secret-detection
   - /push-protection-for-repositories-and-organizations
   - /push-protection-for-users
+  - /working-with-push-protection
   - /pushing-a-branch-blocked-by-push-protection
   - /troubleshooting-secret-scanning
 ---

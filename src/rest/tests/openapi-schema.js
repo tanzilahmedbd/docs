@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { describe } from '@jest/globals'
+import { beforeAll, describe, expect, test } from 'vitest'
 import walk from 'walk-sync'
 import { isPlainObject, difference } from 'lodash-es'
 
@@ -194,8 +194,6 @@ describe('code examples are defined', () => {
       let domain = 'https://api.github.com'
       if (version.includes('enterprise-server')) {
         domain = 'http(s)://HOSTNAME/api/v3'
-      } else if (version === 'github-ae@latest') {
-        domain = 'https://HOSTNAME/api/v3'
       }
 
       const operation = await findOperation(version, 'GET', '/repos/{owner}/{repo}')

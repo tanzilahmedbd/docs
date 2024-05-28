@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic'
 import cx from 'classnames'
 import { LinkExternalIcon } from '@primer/octicons-react'
 
-import { Alert } from 'src/frame/components/ui/Alert'
 import { DefaultLayout } from 'src/frame/components/DefaultLayout'
 import { ArticleTitle } from 'src/frame/components/article/ArticleTitle'
 import { useArticleContext } from 'src/frame/components/context/ArticleContext'
@@ -22,6 +21,7 @@ import { Breadcrumbs } from 'src/frame/components/page-header/Breadcrumbs'
 import { Link } from 'src/frame/components/Link'
 import { useTranslation } from 'src/languages/components/useTranslation'
 import { LinkPreviewPopover } from 'src/links/components/LinkPreviewPopover'
+import { ReplaceDomain } from 'src/links/components/replace-domain'
 
 const ClientSideRefresh = dynamic(() => import('src/frame/components/ClientSideRefresh'), {
   ssr: false,
@@ -57,13 +57,15 @@ export const ArticlePage = () => {
           {intro}
         </Lead>
       )}
+    </>
+  )
 
-      {permissions && <PermissionsStatement permissions={permissions} />}
+  const introCalloutsProp = (
+    <>
+      <PermissionsStatement permissions={permissions} product={product} />
 
       {includesPlatformSpecificContent && <PlatformPicker />}
       {includesToolSpecificContent && <ToolPicker />}
-
-      {product && <Alert className="mb-4" html={product} />}
     </>
   )
 
@@ -102,16 +104,25 @@ export const ArticlePage = () => {
       <LinkPreviewPopover />
       {isDev && <ClientSideRefresh />}
       {router.pathname.includes('/rest/') && <RestRedirect />}
+      <ReplaceDomain />
       {currentLayout === 'inline' ? (
-        <ArticleInlineLayout
-          supportPortalVaIframeProps={supportPortalVaIframeProps}
-          topper={<ArticleTitle>{title}</ArticleTitle>}
-          intro={introProp}
-          toc={toc}
-          breadcrumbs={<Breadcrumbs />}
-        >
-          {articleContents}
-        </ArticleInlineLayout>
+        <>
+          <ArticleInlineLayout
+            supportPortalVaIframeProps={supportPortalVaIframeProps}
+            topper={<ArticleTitle>{title}</ArticleTitle>}
+            intro={introProp}
+            introCallOuts={introCalloutsProp}
+            toc={toc}
+            breadcrumbs={<Breadcrumbs />}
+          >
+            {articleContents}
+          </ArticleInlineLayout>
+          {isLearningPath ? (
+            <div className="container-lg mt-4 px-3">
+              <LearningTrackNav track={currentLearningTrack} />
+            </div>
+          ) : null}
+        </>
       ) : (
         <div className="container-xl px-3 px-md-6 my-4">
           <div className={cx('d-none d-xxl-block mt-3 mr-auto width-full')}>
@@ -121,7 +132,12 @@ export const ArticlePage = () => {
           <ArticleGridLayout
             supportPortalVaIframeProps={supportPortalVaIframeProps}
             topper={<ArticleTitle>{title}</ArticleTitle>}
-            intro={introProp}
+            intro={
+              <>
+                {introProp}
+                {introCalloutsProp}
+              </>
+            }
             toc={toc}
           >
             {articleContents}

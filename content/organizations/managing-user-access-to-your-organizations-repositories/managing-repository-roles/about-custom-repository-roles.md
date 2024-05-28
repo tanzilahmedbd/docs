@@ -27,10 +27,6 @@ After you create a custom role, anyone with admin access to a repository can ass
 
 You can also use the REST API to create and manage custom repository roles. For more information, see "[AUTOTITLE](/rest/orgs/custom-roles)."
 
-{% elsif ghes < 3.8 %}
-
-You can also use the REST API to list the custom repository roles available in your organization. For more information, see "[AUTOTITLE](/rest/orgs/custom-roles)."
-
 {% endif %}
 
 {% ifversion custom-org-roles %}
@@ -143,4 +139,4 @@ If a person is given different levels of access through different avenues, such 
 To resolve conflicting access, you can adjust your organization's base permissions or the team's access, or edit the custom role. For more information, see:
 - "[AUTOTITLE](/organizations/managing-user-access-to-your-organizations-repositories/setting-base-permissions-for-an-organization)"
 - "[AUTOTITLE](/organizations/managing-user-access-to-your-organizations-repositories/managing-team-access-to-an-organization-repository)"
-- "[Editing a repository role](#editing-a-repository-role)"
+- "[Editing a repository role](/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/managing-custom-repository-roles-for-an-organization#editing-a-repository-role)"

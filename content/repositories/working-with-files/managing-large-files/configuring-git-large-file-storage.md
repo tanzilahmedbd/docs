@@ -9,7 +9,6 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 shortTitle: Configure Git LFS
 ---
@@ -17,7 +16,7 @@ If there are existing files in your repository that you'd like to use {% data va
 
 {% data reusables.large_files.resolving-upload-failures %}
 
-{% ifversion ghes or ghae %}
+{% ifversion ghes %}
 
 {% tip %}
 
@@ -35,7 +34,7 @@ If there are existing files in your repository that you'd like to use {% data va
 
    ```shell
    $ git {% data variables.large_files.command_name %} track "*.psd"
-   > Adding path *.psd
+   > Tracking "*.psd"
    ```
 
    Every file type you want to associate with {% data variables.large_files.product_name_short %} will need to be added with `git {% data variables.large_files.command_name %} track`. This command amends your repository's _.gitattributes_ file and associates large files with {% data variables.large_files.product_name_short %}.

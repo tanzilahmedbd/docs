@@ -8,15 +8,16 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 type: tutorial
 shortTitle: Use runners in a workflow
 ---
- 
+
 {% data reusables.actions.enterprise-github-hosted-runners %}
 
 You can target self-hosted runners for use in a workflow based on the labels assigned to the runners{% ifversion target-runner-groups %}, or their group membership, or a combination of these{% endif %}.
+
+>[!NOTE]Action Runner Controller does not support multiple labels, only the name of the runner can be used in place of a label
 
 ## About self-hosted runner labels
 
@@ -30,7 +31,7 @@ For information on creating custom and default labels, see "[AUTOTITLE](/actions
 
 ## About self-hosted runner groups
 
-For self-hosted runners defined at the organization {% ifversion ghec or ghes or ghae %}or enterprise levels{% else %}level{% endif %}, you can group your runners with shared characteristics into a single runner group and then configure your job to target the runner group.
+For self-hosted runners defined at the organization {% ifversion ghec or ghes %}or enterprise levels{% else %}level{% endif %}, you can group your runners with shared characteristics into a single runner group and then configure your job to target the runner group.
 
 To specify a self-hosted runner group for your job, configure `runs-on.group` in your workflow file.
 
@@ -59,7 +60,7 @@ For information on creating and managing runner groups, see "[AUTOTITLE](/action
 
 A self-hosted runner automatically receives certain labels when it is added to {% data variables.product.prodname_actions %}. These are used to indicate its operating system and hardware platform:
 
-- `self-hosted`: Default label applied to all self-hosted runners.
+- `self-hosted`: Default label applied to self-hosted runners.
 - `linux`, `windows`, or `macOS`: Applied depending on operating system.
 - `x64`, `ARM`, or `ARM64`: Applied depending on hardware architecture.
 
@@ -73,7 +74,7 @@ runs-on: [self-hosted, linux, ARM64]
 - `linux` - Only use a Linux-based runner.
 - `ARM64` - Only use a runner based on ARM64 hardware.
 
-The default labels are fixed and cannot be changed or removed. Consider using custom labels if you need more control over job routing.
+To create individual self-hosted runners without the default labels, pass the `--no-default-labels` flag when you create the runner. Actions Runner Controller does not support multiple labels.
 
 ## Using custom labels to route jobs
 

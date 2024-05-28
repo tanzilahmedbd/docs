@@ -14,7 +14,6 @@ intro: 'GitHub''s collaborative approach to development depends on publishing co
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 ---
 ## About remote repositories
@@ -23,8 +22,8 @@ A remote URL is Git's fancy way of saying "the place where your code is stored."
 
 You can only push to two types of URL addresses:
 
-- An HTTPS URL like `https://{% data variables.command_line.backticks %}/user/repo.git`
-- An SSH URL, like `git@{% data variables.command_line.backticks %}:user/repo.git`
+- An HTTPS URL like `https://{% data variables.product.product_url %}/user/repo.git`
+- An SSH URL, like `git@{% data variables.product.product_url %}:user/repo.git`
 
 Git associates a remote URL with a name, and your default remote is usually called `origin`.
 
@@ -69,7 +68,7 @@ When you `git clone`, `git fetch`, `git pull`, or `git push` to a remote reposit
 
 ## Cloning with SSH URLs
 
-SSH URLs provide access to a Git repository via SSH, a secure protocol. To use these URLs, you must generate an SSH keypair on your computer and add the **public** key to your account on {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.location.product_location %}{% endif %}. For more information, see "[AUTOTITLE](/authentication/connecting-to-github-with-ssh)."
+SSH URLs provide access to a Git repository via SSH, a secure protocol. To use these URLs, you must generate an SSH keypair on your computer and add the **public** key to your account on {% data variables.location.product_location %}. For more information, see "[AUTOTITLE](/authentication/connecting-to-github-with-ssh)."
 
 When you `git clone`, `git fetch`, `git pull`, or `git push` to a remote repository using SSH URLs, you'll be prompted for a password and must provide your SSH key passphrase. For more information, see "[AUTOTITLE](/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases)."
 

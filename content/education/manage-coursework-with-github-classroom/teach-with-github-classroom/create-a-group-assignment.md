@@ -8,6 +8,9 @@ redirect_from:
   - /education/manage-coursework-with-github-classroom/create-group-assignments
   - /education/manage-coursework-with-github-classroom/create-a-group-assignment
 ---
+
+{% data reusables.classroom.note-on-assignment-changes %}
+
 ## About group assignments
 
 {% data reusables.classroom.assignments-group-definition %} Students can work together on a group assignment in a shared repository, like a team of professional developers.
@@ -111,6 +114,10 @@ Optionally, you can automatically grade assignments and create a space for discu
 ### Testing assignments automatically
 
 {% data reusables.classroom.assignments-guide-using-autograding %}
+
+### Designating protected file paths
+
+{% data reusables.classroom.assignments-guide-protected-paths %}
 
 ### Creating a pull request for feedback
 

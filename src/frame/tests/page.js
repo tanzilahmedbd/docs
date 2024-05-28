@@ -1,7 +1,8 @@
 import { fileURLToPath } from 'url'
 import path from 'path'
+
 import cheerio from 'cheerio'
-import { describe, expect } from '@jest/globals'
+import { beforeAll, beforeEach, describe, expect, test } from 'vitest'
 
 import Page, { FrontmatterErrorsError } from '#src/frame/lib/page.js'
 import { allVersions } from '#src/versions/lib/all-versions.js'
@@ -262,7 +263,7 @@ describe('Page class', () => {
       })
     })
 
-    it('includes videos specified in the featuredLinks frontmatter', async () => {
+    test('includes videos specified in the featuredLinks frontmatter', async () => {
       expect(page.featuredLinks.videos).toStrictEqual([
         {
           title: 'codespaces',
@@ -283,7 +284,7 @@ describe('Page class', () => {
   })
 
   describe('introLinks', () => {
-    it('includes the links specified in the introLinks frontmatter', async () => {
+    test('includes the links specified in the introLinks frontmatter', async () => {
       const page = await Page.init({
         relativePath: 'article-with-introLinks.md',
         basePath: path.join(__dirname, '../../../src/fixtures/fixtures'),
@@ -298,7 +299,7 @@ describe('Page class', () => {
   })
 
   describe('Page.parseFrontmatter()', () => {
-    it('throws an error on bad input', () => {
+    test('throws an error on bad input', () => {
       const markdown = null
       expect(() => {
         Page.parseFrontmatter('some/file.md', markdown)
@@ -315,10 +316,8 @@ describe('Page class', () => {
       })
       expect(page.versions.fpt).toBe('*')
       expect(page.versions.ghes).toBe('>3.0')
-      expect(page.versions.ghae).toBeUndefined()
       expect(page.applicableVersions.includes('free-pro-team@latest')).toBe(true)
       expect(page.applicableVersions.includes(`enterprise-server@${latest}`)).toBe(true)
-      expect(page.applicableVersions.includes(`github-ae@latest`)).toBe(false)
     })
 
     test('index page', async () => {
@@ -327,7 +326,7 @@ describe('Page class', () => {
         basePath: path.join(__dirname, '../../../content'),
         languageCode: 'en',
       })
-      expect(page.versions).toEqual({ fpt: '*', ghae: '*', ghec: '*', ghes: '*' })
+      expect(page.versions).toEqual({ fpt: '*', ghec: '*', ghes: '*' })
     })
 
     test('enterprise admin index page', async () => {
@@ -353,7 +352,6 @@ describe('Page class', () => {
       //
       // versions:
       //   ghes: '<3.0'
-      //   ghae: '*'
       //
       // So we expect to get the versioning from both.
       const page = await Page.init({
@@ -376,7 +374,6 @@ describe('Page class', () => {
       // the frontmatter GHES `*` is not being overwritten by the placeholder's GHES `<3.0`.
       expect(page.applicableVersions.includes('free-pro-team@latest')).toBe(true)
       expect(page.applicableVersions.includes(`enterprise-server@${latest}`)).toBe(true)
-      expect(page.applicableVersions.includes('github-ae@latest')).toBe(true)
       expect(page.applicableVersions.includes('feature')).toBe(false)
       expect(page.applicableVersions.includes('placeholder')).toBe(false)
     })

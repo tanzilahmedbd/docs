@@ -4,7 +4,6 @@ intro: 'An overview of the programming languages supported by {% data variables.
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - GitHub
@@ -16,7 +15,7 @@ redirect_from:
 
 ## About supported languages
 
-Most {% data variables.product.prodname_dotcom %} features work regardless of which languages your code is written in. You can search for code or enable syntax highlighting based on any language known to {% data variables.product.prodname_dotcom %}. For more information, see "[AUTOTITLE]{% ifversion code-search-code-view %}(/search-github/github-code-search/understanding-github-code-search-syntax#language-qualifier){% else %}(/search-github/searching-on-github/searching-code#search-by-language){% endif %}" or "[AUTOTITLE](/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks#syntax-highlighting)."
+Most {% data variables.product.prodname_dotcom %} features work regardless of which languages your code is written in. You can search for code or enable syntax highlighting based on any language known to {% data variables.product.prodname_dotcom %}. For more information, see "[AUTOTITLE]{% ifversion code-search-upgrade %}(/search-github/github-code-search/understanding-github-code-search-syntax#language-qualifier){% else %}(/search-github/searching-on-github/searching-code#search-by-language){% endif %}" or "[AUTOTITLE](/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks#syntax-highlighting)."
 
 Some {% data variables.product.prodname_dotcom %} products have features that are currently only supported for a subset of programming languages.
 
@@ -44,12 +43,8 @@ Some features are supported for additional languages or package managers. If you
 
 {% note %}
 
-{% ifversion ghae %}
-**Note:** PHP{% ifversion ghae %}, Ruby,{% endif %} and Scala are supported for {% data variables.product.prodname_code_scanning %} by third-party actions.
-{% else %}
 **Notes:**
-- The support of Gradle for the dependency graph and {% data variables.product.prodname_dependabot_alerts %} is limited to the upload of data obtained using the dependency submission API.
+- The support of Gradle for the dependency graph and {% data variables.product.prodname_dependabot_alerts %} is limited to the upload of data obtained using the {% data variables.dependency-submission-api.name %}.
 - PHP and Scala are supported for {% data variables.product.prodname_code_scanning %} by third-party actions.
-{% endif %}
 
 {% endnote %}

@@ -9,7 +9,6 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Organizations
@@ -17,6 +16,8 @@ topics:
 shortTitle: Add outside collaborator
 permissions: People with admin access to a repository can add an outside collaborator to the repository.
 ---
+
+{% data reusables.enterprise-managed.repo-collaborators-note %}
 
 ## About outside collaborators
 
@@ -36,13 +37,7 @@ Before you can add someone as an outside collaborator on a repository, the perso
 Outside collaborators are not required to use SAML SSO to access resources in your organization. For more information, see "[AUTOTITLE](/admin/identity-and-access-management/using-saml-for-enterprise-iam/configuring-saml-single-sign-on-for-your-enterprise)."
 {% endif %}
 
-{% ifversion not ghae %}
 If your organization requires two-factor authentication, all outside collaborators must enable two-factor authentication before accepting your invitation to collaborate on a repository. For more information, see "[AUTOTITLE](/organizations/keeping-your-organization-secure/managing-two-factor-authentication-for-your-organization/requiring-two-factor-authentication-in-your-organization)."
-{% endif %}
-
-{% ifversion ghec %}
-Outside collaborators cannot be added to an {% data variables.enterprise.prodname_emu_enterprise %}. However, you can grant limited access to users outside your enterprise using the guest collaborator role. For more information, see "[AUTOTITLE](/admin/managing-accounts-and-repositories/managing-users-in-your-enterprise/roles-in-an-enterprise#guest-collaborators)."
-{% endif %}
 
 Outside collaborators cannot be added to a team, team membership is restricted to members of the organization.
 

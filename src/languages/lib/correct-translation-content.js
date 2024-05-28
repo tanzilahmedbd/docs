@@ -20,14 +20,34 @@ export function correctTranslatedContentStrings(content, englishContent, context
   content = content.replaceAll('[AUTOTITLE"을 참조하세요.](', '[AUTOTITLE](')
   content = content.replaceAll('[ AUTOTITLE](', '[AUTOTITLE](')
   content = content.replaceAll('[ "AUTOTITLE](', '[AUTOTITLE](')
+  content = content.replaceAll('[«AUTOTITLE»](', '[AUTOTITLE](')
 
   if (context.code === 'ru') {
-    // We've seen a lot of these in the Russian translations:
+    // Low-hanging fruit for the data tag
     content = content.replaceAll('{% данных variables', '{% data variables')
+    content = content.replaceAll('{% данными variables', '{% data variables')
+    content = content.replaceAll('{% данных организации variables', '{% data variables')
+    content = content.replaceAll('{% данным variables.', '{% data variables.')
+    content = content.replaceAll('{% данные variables.', '{% data variables.')
+    content = content.replaceAll('{% данных reusables', '{% data reusables')
+    content = content.replaceAll('{% данными reusables', '{% data reusables')
     content = content.replaceAll('{% variables.', '{% data variables.')
+    content = content.replaceAll('{% необработанного %}', '{% raw %}')
+    content = content.replaceAll('{%- ifversion fpt или ghec %}', '{%- ifversion fpt or ghec %}')
+    content = content.replaceAll('{% ifversion fpt или ghec %}', '{% ifversion fpt or ghec %}')
+    content = content.replaceAll('{% endif _%}', '{% endif %}')
+    content = content.replaceAll('{% конечным %}', '{% endif %}')
+    content = content.replaceAll('{% переменных данных.', '{% data variables.')
+    content = content.replaceAll('{% повторно используемых данных.', '{% data reusables.')
+    content = content.replaceAll('{% примечание %}', '{% note %}')
+    content = content.replaceAll('{% конечных головщиков %}', '{% endrowheaders %}')
+    content = content.replaceAll('{% данных для повторного использования.', '{% data reusables.')
+    content = content.replaceAll('{% еще %}', '{% else %}')
+    content = content.replaceAll('{% необработанные %}', '{% raw %}')
+    content = content.replaceAll('{% подсказки %}', '{% tip %}')
 
     // For the rather custom Russian translation of
-    // the content/get-started/quickstart/github-glossary.md page
+    // the content/get-started/learning-about-github/github-glossary.md page
     // These string replacements speak for themselves.
     content = content.replaceAll(
       '{% для глоссария в глоссариях %}',
@@ -37,14 +57,40 @@ export function correctTranslatedContentStrings(content, englishContent, context
     content = content.replaceAll('{{ глоссарий.description }}', '{{ glossary.description }}')
   }
 
+  if (context.code === 'ja') {
+    // Low-hanging fruit for the data tag
+    content = content.replaceAll('{% データ variables', '{% data variables')
+    content = content.replaceAll('{% データvariables', '{% data variables')
+
+    // Internal issue #4160
+    content = content.replaceAll(
+      '- % data variables.product.prodname_copilot_enterprise %}',
+      '- {% data variables.product.prodname_copilot_enterprise %}',
+    )
+  }
+
+  if (context.code === 'zh') {
+    // Low-hanging fruit for the data tag
+    content = content.replaceAll('{% 数据variables', '{% data variables')
+  }
+
   if (context.code === 'ko') {
+    // Low-hanging fruit for the data tag
+    content = content.replaceAll('{% 데이터 variables', '{% data variables')
+    content = content.replaceAll('{% 데이터 reusables.', '{% data reusables.')
+
     // For the rather custom Korean translation of github-glossary.md
     // Let's try to salvage based on what's in
-    // docs-internal.ko-kr/content/get-started/quickstart/github-glossary.md
+    // docs-internal.ko-kr/content/get-started/learning-about-github/github-glossary.md
     // as of September 2023.
     content = content.replaceAll('용어집 %}의 용어집에 대한 {%', '{% for glossary in glossaries %}')
     content = content.replaceAll('{{ 용어집.term }}', '{{ glossary.term }}')
     content = content.replaceAll('{{ 용어집.description }}', '{{ glossary.description }}')
+  }
+
+  if (context.code === 'es') {
+    // Seen these a few times in the Spanish translations.
+    content = content.replaceAll('{% vulnerables variables.', '{% data variables.')
   }
 
   // We have seen a lot of Markdown tables, that may have Liquid tags
@@ -79,6 +125,16 @@ export function correctTranslatedContentStrings(content, englishContent, context
       '{% data variables.copilot.cfb_price_per_month %} par utilisateur et par mois.',
     )
   }
+
+  // These are common mistakes made by translations that are specific.
+  // It's prevalent in all translations so that's why it's not per-language.
+  // It's important though that this happens after the other per-language
+  // specific fixes above. For example `{{% данных variables...`
+  content = content.replaceAll('{{% data variables.', '{% data variables.')
+  content = content.replaceAll('{%%data variables.', '{% data variables.')
+  content = content.replaceAll('{{% data reusables.', '{% data reusables.')
+  content = content.replaceAll('{%%data reusables.', '{% data reusables.')
+  content = content.replaceAll('{{% ifversion ', '{% ifversion ')
 
   // A lot of Liquid tags lose their linebreak after the `}`
   // result in formatting problems, especially around Markdown tables.
@@ -173,5 +229,57 @@ export function correctTranslatedContentStrings(content, englishContent, context
     })
   }
 
+  // We *used* to mention this key within an English sentence. But that
+  // whole sentence is removed (from the English) and thus we need to remove
+  // same sentence from the translations as well.
+  // Ideally, the translators immediately notice the change but we can't
+  // guarantee that turnaround time. So we string replace it with an
+  // empty string.
+  // NOTE! By late 2024 all translations *should* have caught up with
+  // English translation (which removed the sentence). Then we can
+  // delete all of this code.
+  // See internal issue docs-content#13361
+  if (
+    context.relativePath ===
+    'authentication/managing-commit-signature-verification/about-commit-signature-verification.md'
+  ) {
+    const keyString = '5DE3 E050 9C47 EA3C F04A 42D3 4AEE 18F8 3AFD EB23'
+    const translatedSentences = [
+      // ru
+      'Полный отпечаток ключа — `' + keyString + '`.',
+      // ko
+      `키의 전체 지문은 \`${keyString}\`입니다.`,
+      // es
+      `La huella digital completa de la clave es \`${keyString}\`.`,
+      // zh
+      `密钥的完整指纹是 \`${keyString}\`。`,
+      // pt
+      `A impressão digital completa da chave é \`${keyString}\`.`,
+      // ja
+      `キーの完全な指紋は、\`${keyString}\` です。`,
+      // fr
+      `L’empreinte digitale complète de la clé est \`${keyString}\`.`,
+      // de
+      `Der vollständige Fingerabdruck des Schlüssels ist \`${keyString}\`.`,
+    ]
+    for (const translatedSentence of translatedSentences) {
+      if (content.includes(translatedSentence)) {
+        content = content.replace(translatedSentence, '')
+        break
+      }
+    }
+    if (content.includes(keyString)) {
+      // NOTE! These lines are for debugging and we can delete them once
+      // we're confident the keyString is no longer present in any
+      // translation.
+      // for (const line of content.split('\n')) {
+      //   if (line.includes(keyString)) {
+      //     console.log({ [context.code]: line })
+      //   }
+      // }
+      // throw new Error('Key string is still in there!')
+      content = content.replace(keyString, '[redacted in translation]')
+    }
+  }
   return content
 }

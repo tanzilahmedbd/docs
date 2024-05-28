@@ -31,8 +31,8 @@ The following diagram summarizes the {% data variables.product.prodname_secret_s
 ## Joining the {% data variables.product.prodname_secret_scanning %} program on {% data variables.product.prodname_dotcom %}
 
 1. Contact {% data variables.product.prodname_dotcom %} to get the process started.
-1. Identify the relevant secrets you want to scan for and create regular expressions to capture them.
-1. For secret matches found publicly, create a secret alert service which accepts webhooks from {% data variables.product.prodname_dotcom %}  that contain the {% data variables.product.prodname_secret_scanning %} message payload.
+1. Identify the relevant secrets you want to scan for and create regular expressions to capture them. For more detailed information and recommendations, see "[Identify your secrets and create regular expressions](#identify-your-secrets-and-create-regular-expressions)" below.
+1. For secret matches found publicly, create a secret alert service which accepts webhooks from {% data variables.product.prodname_dotcom %} that contain the {% data variables.product.prodname_secret_scanning %} message payload.
 1. Implement signature verification in your secret alert service.
 1. Implement secret revocation and user notification in your secret alert service.
 1. Provide feedback for false positives (optional).
@@ -46,10 +46,16 @@ You will receive details on the {% data variables.product.prodname_secret_scanni
 ### Identify your secrets and create regular expressions
 
 To scan for your secrets, {% data variables.product.prodname_dotcom %} needs the following pieces of information for each secret that you want included in the {% data variables.product.prodname_secret_scanning %} program:
+- A unique, human-readable name for the secret type. We'll use this to generate the `Type` value in the message payload later.
+- A regular expression which finds the secret type. We recommend you are as precise as possible, because this will help reduce the number of false positives. Some best practices for high quality, identifiable secrets are:
+  - A uniquely defined prefix
+  - High entropy random strings
+  - A 32-bit checksum
 
-- A unique, human readable name for the secret type. We'll use this to generate the `Type` value in the message payload later.
-- A regular expression which finds the secret type. Be as precise as possible, because this will reduce the number of false positives.
-- The URL of the endpoint that receives messages from {% data variables.product.prodname_dotcom %}. This does not have to be unique for each secret type.
+  ![Screenshot showing the breakdown of a secret into details to be considered when submitting to GitHub a regular expression to find high quality secrets.](/assets/images/help/security/regular-expression-guidance.png)
+
+- A test account for your service. This will allow us to generate and analyze examples of the secrets, further reducing false positives.
+- The URL of the endpoint that receives messages from {% data variables.product.prodname_dotcom %}. The URL doesn't have to be unique for each secret type.
 
 Send this information to <a href="mailto:secret-scanning@github.com">secret-scanning@github.com</a>.
 
@@ -103,12 +109,12 @@ to validate the messages you receive are genuinely from {% data variables.produc
 
 The two HTTP headers to look for are:
 
-- `GITHUB-PUBLIC-KEY-IDENTIFIER`: Which `key_identifier` to use from our API
-- `GITHUB-PUBLIC-KEY-SIGNATURE`: Signature of the payload
+- `Github-Public-Key-Identifier`: Which `key_identifier` to use from our API
+- `Github-Public-Key-Signature`: Signature of the payload
 
 You can retrieve the {% data variables.product.prodname_dotcom %} secret scanning public key from https://api.github.com/meta/public_keys/secret_scanning and validate the message using the `ECDSA-NIST-P256V1-SHA256` algorithm. The endpoint
 will provide several `key_identifier` and public keys. You can determine which public
-key to use based on the value of `GITHUB-PUBLIC-KEY-IDENTIFIER`.
+key to use based on the value of `Github-Public-Key-Identifier`.
 
 {% note %}
 
@@ -128,27 +134,13 @@ key to use based on the value of `GITHUB-PUBLIC-KEY-IDENTIFIER`.
 POST / HTTP/2
 Host: HOST
 Accept: */*
-content-type: application/json
-GITHUB-PUBLIC-KEY-IDENTIFIER: f9525bf080f75b3506ca1ead061add62b8633a346606dc5fe544e29231c6ee0d
-GITHUB-PUBLIC-KEY-SIGNATURE: MEUCIFLZzeK++IhS+y276SRk2Pe5LfDrfvTXu6iwKKcFGCrvAiEAhHN2kDOhy2I6eGkOFmxNkOJ+L2y8oQ9A2T9GGJo6WJY=
-Content-Length: 83
+Content-Length: 104
+Content-Type: application/json
+Github-Public-Key-Identifier: bcb53661c06b4728e59d897fb6165d5c9cda0fd9cdf9d09ead458168deb7518c
+Github-Public-Key-Signature: MEQCIQDaMKqrGnE27S0kgMrEK0eYBmyG0LeZismAEz/BgZyt7AIfXt9fErtRS4XaeSt/AO1RtBY66YcAdjxji410VQV4xg==
 
-[{"token":"some_token","type":"some_type","url":"some_url","source":"some_source"}]
+[{"source":"commit","token":"some_token","type":"some_type","url":"https://example.com/base-repo-url/"}]
 ```
-
-{% note %}
-
-**Note**: The key id and signature from the example payload is derived from a test key.
-The public key for them is:
-
-```shell
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsz9ugWDj5jK5ELBK42ynytbo38gP
-HzZFI03Exwz8Lh/tCfL3YxwMdLjB+bMznsanlhK0RwcGP3IDb34kQDIo3Q==
------END PUBLIC KEY-----
-```
-
-{% endnote %}
 
 The following code snippets demonstrate how you could perform signature validation.
 The code examples assume you've set an environment variable called `GITHUB_PRODUCTION_TOKEN` with a generated [{% data variables.product.pat_generic %}](https://github.com/settings/tokens) to avoid hitting rate limits. The {% data variables.product.pat_generic %} does not need any scopes/permissions.

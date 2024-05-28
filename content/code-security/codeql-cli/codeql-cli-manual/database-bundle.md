@@ -2,7 +2,6 @@
 title: database bundle
 versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   fpt: '*'
-  ghae: '*'
   ghec: '*'
   ghes: '*'
 topics:
@@ -25,7 +24,7 @@ redirect_from:
 ## Synopsis
 
 ```shell copy
-codeql database bundle --output=<output> [--mode=<mode>] <options>... -- <database>
+codeql database bundle --output=<output> <options>... -- <database>
 ```
 
 ## Description
@@ -47,6 +46,12 @@ that results, logs, TRAP, or similar should be included.
 #### `-o, --output=<output>`
 
 \[Mandatory] The output file, typically with the extension ".zip".
+
+#### `--include-diagnostics`
+
+Include diagnostics in the bundle.
+
+Available since `v2.16.0`.
 
 #### `--include-results`
 
@@ -98,7 +103,7 @@ If `--max-disk-cache` is not given, the evaluator will try hard to
 curtail disk cache usage if the free space on the file system drops
 below this percentage.
 
-#### `-m, --mode=<mode>`
+#### `--cache-cleanup=<mode>`
 
 Select how aggressively to trim the cache. Choices include:
 

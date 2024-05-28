@@ -1,11 +1,17 @@
+import { describe, expect, test } from 'vitest'
+
 import { getDOMCached as getDOM } from '#src/tests/helpers/e2etest.js'
 
 describe('sidebar', () => {
   test('top level product mentioned at top of sidebar', async () => {
     const $ = await getDOM('/get-started')
+    // Desktop
     const sidebarProduct = $('[data-testid="sidebar-product-xl"]')
     expect(sidebarProduct.text()).toBe('Get started')
     expect(sidebarProduct.attr('href')).toBe('/en/get-started')
+    // Mobile
+    expect($('[data-testid="header-subnav"]').length).toBe(1)
+    expect($('[data-testid="header-subnav-hamburger"]').length).toBe(1)
   })
 
   test('REST pages get the REST sidebar', async () => {
@@ -14,7 +20,7 @@ describe('sidebar', () => {
   })
 
   test('leaf-node article marked as aria-current=page', async () => {
-    const $ = await getDOM('/get-started/quickstart/hello-world')
+    const $ = await getDOM('/get-started/start-your-journey/hello-world')
     expect(
       $(
         '[data-testid=sidebar] [data-testid=product-sidebar] a[aria-current="page"] div span',
@@ -60,5 +66,14 @@ describe('sidebar', () => {
       const link = $('#allproducts-menu a')
       expect(link.text()).toBe('Pages (HubGit Enterprise Cloud)')
     }
+  })
+
+  test('no docset link for early-access', async () => {
+    const $ = await getDOM('/early-access/secrets/deeper/mariana-trench')
+    // Deskop
+    expect($('[data-testid="sidebar-product-xl"]').length).toBe(0)
+    // Mobile
+    expect($('[data-testid="header-subnav"]').length).toBe(1)
+    expect($('[data-testid="header-subnav-hamburger"]').length).toBe(0)
   })
 })

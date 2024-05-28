@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test'
 // In GitHub Actions, we rely on setting the environment variable directly
 // but for convenience, for local development, engineers might have a
 // .env file that can set environment variable. E.g. ELASTICSEARCH_URL.
-// The `src/frame/start-server.js` script uses dotenv too, but since Playwright
+// The `src/frame/start-server.ts` script uses dotenv too, but since Playwright
 // tests only interface with the server via HTTP, we too need to find
 // this out.
 dotenv.config()
@@ -43,9 +43,9 @@ test('use sidebar to go to Hello World page', async ({ page }) => {
 
   await expect(page).toHaveTitle(/Getting started with HubGit/)
 
-  await page.getByTestId('product-sidebar').getByText('Quickstart').click()
+  await page.getByTestId('product-sidebar').getByText('Start your journey').click()
   await page.getByTestId('product-sidebar').getByText('Hello World').click()
-  await expect(page).toHaveURL(/\/en\/get-started\/quickstart\/hello-world/)
+  await expect(page).toHaveURL(/\/en\/get-started\/start-your-journey\/hello-world/)
   await expect(page).toHaveTitle(/Hello World - GitHub Docs/)
 })
 
@@ -183,7 +183,10 @@ test.describe('hover cards', () => {
     await page.goto('/pages/quickstart')
 
     // hover over a link and check for intro content from hovercard
-    await page.locator('#article-contents').getByRole('link', { name: 'Quickstart' }).hover()
+    await page
+      .locator('#article-contents')
+      .getByRole('link', { name: 'Start your journey' })
+      .hover()
     await expect(
       page.getByText(
         'Get started using HubGit to manage Git repositories and collaborate with others.',
@@ -241,7 +244,10 @@ test.describe('hover cards', () => {
     await page.goto('/pages/quickstart')
 
     // Simply putting focus on the link should not open the hovercard
-    await page.locator('#article-contents').getByRole('link', { name: 'Quickstart' }).focus()
+    await page
+      .locator('#article-contents')
+      .getByRole('link', { name: 'Start your journey' })
+      .focus()
     await expect(
       page.getByText(
         'Get started using GitHub to manage Git repositories and collaborate with others.',
@@ -267,7 +273,7 @@ test.describe('hover cards', () => {
 
   test('internal links get a aria-roledescription and aria-describedby', async ({ page }) => {
     await page.goto('/pages/quickstart')
-    const link = page.locator('#article-contents').getByRole('link', { name: 'Quickstart' })
+    const link = page.locator('#article-contents').getByRole('link', { name: 'Start your journey' })
     await expect(link).toHaveAttribute('aria-roledescription', 'hover card')
 
     // The link gets a `aria-describedby="...ID..."` attribute that points to
@@ -291,6 +297,16 @@ test.describe('test nav at different viewports', () => {
     expect(await page.getByTestId('breadcrumbs-in-article').getByRole('link').all()).toHaveLength(2)
     await expect(page.getByTestId('breadcrumbs-in-article').getByText('Foo')).toBeVisible()
     await expect(page.getByTestId('breadcrumbs-in-article').getByText('Bar')).not.toBeVisible()
+
+    // breadcrumbs show up in rest reference pages
+    await page.goto('/rest/actions/artifacts')
+    await expect(page.getByTestId('breadcrumbs-in-article')).toBeVisible()
+
+    // breadcrumbs show up in one of the pages that use the AutomatedPage
+    // component (e.g. graphql, audit log, etc.) -- we test the webhooks
+    // reference page here
+    await page.goto('/webhooks/webhook-events-and-payloads')
+    await expect(page.getByTestId('breadcrumbs-in-article')).toBeVisible()
   })
 
   test('large -> x-large viewports - 1012+', async ({ page }) => {
@@ -355,7 +371,6 @@ test.describe('test nav at different viewports', () => {
 
     // language picker is in mobile menu
     await page.getByTestId('mobile-menu').click()
-    await page.getByTestId('language-picker')
     await expect(page.getByRole('menuitemradio', { name: 'English' })).toBeVisible()
 
     // sign up button is in mobile menu
@@ -389,7 +404,6 @@ test.describe('test nav at different viewports', () => {
 
     // language picker is in mobile menu
     await page.getByTestId('mobile-menu').click()
-    await page.getByTestId('language-picker')
     await expect(page.getByRole('menuitemradio', { name: 'English' })).toBeVisible()
 
     // sign up button is in mobile menu
@@ -558,10 +572,10 @@ test.describe('translations', () => {
   })
 
   test('switch to Japanese from English using widget on article', async ({ page }) => {
-    await page.goto('/get-started/quickstart/hello-world')
+    await page.goto('/get-started/start-your-journey/hello-world')
     await page.getByRole('button', { name: 'Select language: current language is English' }).click()
     await page.getByRole('menuitemradio', { name: '日本語' }).click()
-    await expect(page).toHaveURL('/ja/get-started/quickstart/hello-world')
+    await expect(page).toHaveURL('/ja/get-started/start-your-journey/hello-world')
     await expect(page.getByRole('heading', { name: 'こんにちは World' })).toBeVisible()
 
     // Having done this once, should now use a cookie to redirect
@@ -569,13 +583,98 @@ test.describe('translations', () => {
     // Playwright will cache this redirect, so we need to add something
     // to "cache bust" the URL
     const cb = `?cb=${Math.random()}`
-    await page.goto('/get-started/quickstart/hello-world' + cb)
-    await expect(page).toHaveURL('/ja/get-started/quickstart/hello-world' + cb)
+    await page.goto('/get-started/start-your-journey/hello-world' + cb)
+    await expect(page).toHaveURL('/ja/get-started/start-your-journey/hello-world' + cb)
 
     // If you go, with the Japanese cookie, to the English page directly,
     // it will offer a link to the Japanese URL in a banner.
-    await page.goto('/en/get-started/quickstart/hello-world')
+    await page.goto('/en/get-started/start-your-journey/hello-world')
     await page.getByRole('link', { name: 'Japanese' }).click()
-    await expect(page).toHaveURL('/ja/get-started/quickstart/hello-world')
+    await expect(page).toHaveURL('/ja/get-started/start-your-journey/hello-world')
+  })
+})
+
+test.describe('domain edit', () => {
+  test('edit a domain (using header nav)', async ({ page }) => {
+    test.skip(true, 'Editing domain from header is disabled')
+
+    await page.goto('/')
+    await expect(page.getByText('Domain name:')).not.toBeVisible()
+    await page.getByLabel('Select GitHub product version').click()
+    await page
+      .getByLabel(/Enterprise Server/)
+      .first()
+      .click()
+    await expect(page.getByText('Domain name:')).toBeVisible()
+    await page.getByRole('button', { name: 'Edit' }).click()
+
+    await expect(page.getByTestId('domain-name-edit-form')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Edit your domain name' })).toBeVisible()
+    await page.getByLabel('Your domain name', { exact: true }).fill('  github.com ')
+    await expect(page.getByText("Can't be github.com")).toBeVisible()
+    await page.getByLabel('Your domain name', { exact: true }).fill('github.peterbe.com ')
+    await expect(page.getByText("Can't be github.com")).not.toBeVisible()
+    await page.getByRole('button', { name: 'Save' }).click()
+
+    // This tests that the dialog is gone.
+    // XXX Peterbe: These don't work and I don't know why yet.
+    await expect(page.getByTestId('domain-name-edit-form')).not.toBeVisible()
+    await expect(page.getByText('github.peterbe.com')).toBeVisible()
+  })
+
+  test('edit a domain (clicking HOSTNAME)', async ({ page }) => {
+    await page.goto('/get-started/markdown/replace-domain')
+    await page.getByLabel('Select GitHub product version').click()
+    await page.getByLabel('Enterprise Server 3.12').click() // XXX
+
+    // This is generally discourage in Playwright, but necessary here
+    // in this case. Because of the way
+    // the `main.addEventListener('click', ...)` is handled, it's setting
+    // up that event listener too late. In fact, it happens in a useEffect.
+    // Adding a little delay makes is much more likely that the event
+    // listener has been set up my the time we fire the `.click()` on the
+    // next line.
+    await page.waitForTimeout(500)
+    await page.getByText('HOSTNAME', { exact: true }).first().click()
+
+    await expect(page.getByTestId('domain-name-edit-form')).toBeVisible()
+    await page
+      .getByTestId('domain-name-edit-form')
+      .getByLabel('Your domain name')
+      .fill('peterbe.ghe.com')
+    await page.getByTestId('domain-name-edit-form').getByLabel('Your domain name').press('Enter')
+    await expect(page.getByTestId('domain-name-edit-form')).not.toBeVisible()
+  })
+})
+
+test.describe('view pages with custom domain cookie', () => {
+  test('view article page', async ({ page }) => {
+    await page.goto(
+      '/enterprise-server@latest/get-started/markdown/replace-domain?ghdomain=example.ghe.com',
+    )
+
+    const content = page.locator('pre')
+    await expect(content.nth(0)).toHaveText(/curl https:\/\/example.ghe.com\/api\/v1/)
+    await expect(content.nth(1)).toHaveText(/curl https:\/\/HOSTNAME\/api\/v2/)
+    await expect(content.nth(2)).toHaveText('await fetch("https://example.ghe.com/api/v1")')
+    await expect(content.nth(3)).toHaveText('await fetch("https://HOSTNAME/api/v2")')
+
+    // Now switch to enterprise-cloud, where replacedomain should not be used
+    await page.getByLabel('Select GitHub product version').click()
+    await page.getByLabel('Enterprise Cloud', { exact: true }).click()
+
+    await expect(content.nth(0)).toHaveText(/curl https:\/\/HOSTNAME\/api\/v1/)
+    await expect(content.nth(1)).toHaveText(/curl https:\/\/HOSTNAME\/api\/v2/)
+    await expect(content.nth(2)).toHaveText('await fetch("https://HOSTNAME/api/v1")')
+    await expect(content.nth(3)).toHaveText('await fetch("https://HOSTNAME/api/v2")')
+
+    // Again switch back to enterprise server again
+    await page.getByLabel('Select GitHub product version').click()
+    await page.getByLabel('Enterprise Server 3.').first().click()
+
+    await expect(content.nth(0)).toHaveText(/curl https:\/\/example.ghe.com\/api\/v1/)
+    await expect(content.nth(1)).toHaveText(/curl https:\/\/HOSTNAME\/api\/v2/)
+    await expect(content.nth(2)).toHaveText('await fetch("https://example.ghe.com/api/v1")')
+    await expect(content.nth(3)).toHaveText('await fetch("https://HOSTNAME/api/v2")')
   })
 })

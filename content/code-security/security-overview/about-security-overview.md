@@ -8,7 +8,6 @@ redirect_from:
   - /code-security/security-overview/about-the-security-overview
 versions:
   fpt: '*'
-  ghae: '*'
   ghes: '*'
   ghec: '*'
 type: how_to
@@ -23,13 +22,11 @@ topics:
   - Teams
 ---
 
-{% data reusables.security-overview.beta %}
-
 ## About security overview
 
 {% data reusables.security-overview.about-security-overview %} {% ifversion fpt %}For more information, see [the {% data variables.product.prodname_ghe_cloud %} documentation](/enterprise-cloud@latest/code-security/security-overview/about-security-overview).{% endif %}
 
-{% ifversion ghec or ghes or ghae %}
+{% ifversion ghec or ghes %}
 
 {% note %}
 
@@ -79,7 +76,7 @@ Security overview has multiple views that provide different ways to explore enab
 
 {% data reusables.security-overview.alert-differences %}
 
-For more information about these views, see {% ifversion security-overview-dashboard %}"[AUTOTITLE](/code-security/security-overview/viewing-security-insights-for-your-organization),"{% endif %}"[AUTOTITLE](/code-security/security-overview/assessing-adoption-code-security)" and "[AUTOTITLE](/code-security/security-overview/assessing-code-security-risk)."
+For more information about these views, see {% ifversion security-overview-dashboard %}"[AUTOTITLE](/code-security/security-overview/viewing-security-insights),"{% endif %}"[AUTOTITLE](/code-security/security-overview/assessing-adoption-code-security)" and "[AUTOTITLE](/code-security/security-overview/assessing-code-security-risk)."
 
 {% else %}
 
@@ -99,7 +96,7 @@ Each repository is shown in security overview with an indicator for each type of
 
 {% endif %}
 
-{% ifversion ghec or ghes or ghae %}
+{% ifversion ghec or ghes %}
 
 ## About security overview for enterprises
 
@@ -107,21 +104,15 @@ You can find security overview on the **Code Security** tab for your enterprise.
 
 As with security overview for organizations, security overview for enterprises has multiple views that provide different ways to explore enablement and alert data.
 
+{% ifversion security-overview-dashboard-enterprise %}
+- Use the "Overview" view to see insights about your enterprise's security landscape and progress.{% endif %}
 - Use the "Coverage" view to assess the adoption of code security features across organizations in the enterprise.
 - Use the "Risk" view to assess the risk from security alerts of all types across organizations in the enterprise.
 - Use the individual security alert views to identify your risk from specific vulnerable dependencies, code weaknesses, or leaked secrets.{% else %}You can view repositories owned by your enterprise that have security alerts, view all security alerts, or view security feature-specific alerts from across your enterprise.{% endif %}
 
+For more information about these views, see {% ifversion security-overview-dashboard-enterprise %}"[AUTOTITLE](/code-security/security-overview/viewing-security-insights)," {% endif %}"[AUTOTITLE](/code-security/security-overview/assessing-adoption-code-security)" and "[AUTOTITLE](/code-security/security-overview/assessing-code-security-risk)."
+
 For information about permissions, see "[Permission to view data in security overview](#permission-to-view-data-in-security-overview)."
-
-{% endif %}
-
-{% ifversion ghes < 3.8 or ghae < 3.8 %}
-
-## About security overview for teams
-
-You can find security overview on the **Security** tab for any team in an organization that's owned by an enterprise.
-
-At the team level, security overview displays repository-specific security information for repositories that the team has admin privileges for. For more information, see "[AUTOTITLE](/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/managing-team-access-to-an-organization-repository)."
 
 {% endif %}
 
@@ -177,10 +168,10 @@ For more information about access to security alerts and related views, see "[AU
 
 ### Enterprise-level overview
 
-{% ifversion ghec or ghes or ghae > 3.5 %}
+{% ifversion ghec or ghes %}
 {% note %}
 
-**Note:** If you are an enterprise owner, you will need to join an organization as an organization owner to view data for the organization's repositories in both the organization-level and enterprise-level overview. For more information, see "[AUTOTITLE](/admin/user-management/managing-organizations-in-your-enterprise/managing-your-role-in-an-organization-owned-by-your-enterprise)."
+**Note:** If you are an enterprise owner, you will need to join an organization as an organization owner to view data for the organization's repositories in both the organization-level and enterprise-level overview.{% ifversion secret-scanning-user-owned-repos %} {% data reusables.secret-scanning.secret-scanning-user-owned-repo-access %}{% endif %} For more information, see "[AUTOTITLE](/admin/user-management/managing-organizations-in-your-enterprise/managing-your-role-in-an-organization-owned-by-your-enterprise)."
 
 {% endnote %}
 {% endif %}

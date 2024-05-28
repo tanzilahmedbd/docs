@@ -24,7 +24,7 @@ topics:
 
 There are two types of user accounts for the {% data variables.enterprise.management_console %} on a {% data variables.product.product_name %} instance. The root site administrator account authenticates with a password established during the initial setup of {% data variables.location.product_location %}.
 
-The root site administrator can create additional accounts, and assign one of two roles to each.
+The root site administrator can create additional accounts{% ifversion management-console-editor %}, and assign one of two roles to each{% endif %}.
 
 ### Root site administrator
 
@@ -36,12 +36,19 @@ Only the root site administrator can create and delete {% data variables.enterpr
 
 {% data variables.enterprise.management_console %} users can perform most administrative tasks for {% data variables.location.product_location %}. For heightened security, {% data variables.enterprise.management_console %} users cannot create or delete {% data variables.enterprise.management_console %} user accounts.
 
+{% ifversion management-console-editor %}
+
 Only {% data variables.enterprise.management_console %} users with the operator role can manage SSH keys.
+
+{% data reusables.enterprise.editor-role-note %}
 
 The root site administrator can provision one of two roles for {% data variables.enterprise.management_console %} users:
 
 - **Editor**: A {% data variables.enterprise.management_console %} user with the editor role can perform basic administrative tasks for {% data variables.location.product_location %} in the {% data variables.enterprise.management_console %}. Editors cannot add public SSH keys to the {% data variables.enterprise.management_console %} to grant administrative SSH access to the instance.
-- **Operator**: A {% data variables.enterprise.management_console %} user with the operator role can perform basic administrative tasks for {% data variables.location.product_location %} in the {% data variables.enterprise.management_console %}. Users with the operator role can add SSH keys to the {% data variables.enterprise.management_console %} to grant administrative access to the instance via SSH.
+- **Operator**: A {% data variables.enterprise.management_console %} user with the operator role
+{%- else %}
+{% data variables.enterprise.management_console %} users, sometimes called operators,
+{%- endif %} can perform basic administrative tasks for {% data variables.location.product_location %} in the {% data variables.enterprise.management_console %} and can add SSH keys to the {% data variables.enterprise.management_console %} to grant administrative access to the instance via SSH.
 
 ## Creating or deleting a user account for the {% data variables.enterprise.management_console %}
 
@@ -50,7 +57,7 @@ While signed into the {% data variables.enterprise.management_console %} as the 
 {% data reusables.enterprise_site_admin_settings.click-user-management %}
 1. Click **Create user**.
 1. Fill in the user's name, username, and email address.
-1. Use the drop-down menu to select the user's role. You may select the editor or operator role.
+{% ifversion management-console-editor %}1. Use the drop-down menu to select the user's role. You may select the editor or operator role.{% endif %}
 1. To finish creating the user account, click **Create**. If email notifications are configured for the instance, the user will automatically receive an invitation email with access instructions for the {% data variables.enterprise.management_console %}. For more information, see "[Inviting new {% data variables.enterprise.management_console %} users](#inviting-new-management-console-users)."
 1. Optionally, to delete a {% data variables.enterprise.management_console %} user account, click {% octicon "trash" aria-label="The trash symbol" %} to the right of any user account you wish to delete. Then confirm deletion.
 
@@ -71,14 +78,14 @@ If you have not configured email notifications for {% data variables.location.pr
 
 ## Configuring rate limits for authentication to the {% data variables.enterprise.management_console %}
 
-You can configure the lockout time and login attempt limits for the {% data variables.enterprise.management_console %}. If you configure rate limits, the limits apply to both the root site administrator and any {% data variables.enterprise.management_console %} users.
+You can configure the lockout time and login attempt limits for the {% data variables.enterprise.management_console %}.
 
-After you configure rate limits and a user exceeds the limit, the {% data variables.enterprise.management_console %} will remain locked for the duration set by the lockout time. {% data reusables.enterprise_management_console.unlocking-management-console-with-shell %}
+After you configure rate limits and a {% data variables.enterprise.management_console %} user exceeds the limit, the {% data variables.enterprise.management_console %} will remain locked for the duration set by the lockout time. {% data reusables.enterprise_management_console.unlocking-management-console-with-shell %}
 
 {% data reusables.enterprise_site_admin_settings.access-settings %}
 {% data reusables.enterprise_site_admin_settings.management-console %}
-1. Optionally, under "Lockout time", type a number of minutes to lock the {% data variables.enterprise.management_console %} after too many failed login attempts.
-1. Optionally, under "Login attempt limit", type a maximum number of failed login attempts to allow before the {% data variables.enterprise.management_console %} is locked.
+1. Optionally, under "Lockout time for Management Console users", type a number of minutes to lock the {% data variables.enterprise.management_console %} after too many failed login attempts. When locked out, the root site administrator must be manually unlocked.
+1. Optionally, under "Login attempt limit for all users", type a maximum number of failed login attempts to allow before the {% data variables.enterprise.management_console %} is locked.
 {% data reusables.enterprise_management_console.save-settings %}
 
 {% endif %}

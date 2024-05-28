@@ -13,7 +13,6 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
   ghec: '*'
 topics:
   - Profiles
@@ -47,19 +46,14 @@ If you use Gravatar, and your Gravatar image is associated with the email you us
 ### Setting a profile picture
 
 {% data reusables.user-settings.access_settings %}
-1. Under "Profile Picture", select {% octicon "pencil" aria-hidden="true" %} **Edit**, then click **Upload a photo...**.
-
-   ![Screenshot of the "Public profile" section of a user account's settings. A button, labeled with a pencil icon and "Edit", is outlined in dark orange.](/assets/images/help/profile/edit-profile-photo.png)
-1. Select an image, then click **Upload**.
-1. Crop your picture.
-1. Click **Set new profile picture**.
+{% data reusables.accounts.set-profile-picture %}
 
 ### Resetting your profile picture to the identicon
 
 {% data reusables.user-settings.access_settings %}
 1. Under "Profile Picture", select {% octicon "pencil" aria-hidden="true" %} **Edit**, then click **Remove photo** to revert to your identicon.
 
-   {% ifversion not ghae %}If your email address is associated with a [Gravatar](https://en.gravatar.com/), you cannot revert to your identicon. Click **Revert to Gravatar** instead.{% endif %}
+   If your email address is associated with a [Gravatar](https://en.gravatar.com/), you cannot revert to your identicon. Click **Revert to Gravatar** instead.
 
    ![Screenshot of the "Public profile" section of a user account's settings. A button, labeled with a pencil icon and "Edit", is outlined in dark orange.](/assets/images/help/profile/edit-profile-photo.png)
 
@@ -70,7 +64,7 @@ You can change the name that is displayed on your profile. This name may also be
 {% ifversion fpt or ghec %}
 {% note %}
 
-**Note:** If you're a member of an {% data variables.enterprise.prodname_emu_enterprise %}, any changes to your profile name must be made through your identity provider instead of {% data variables.product.prodname_dotcom_the_website %}. {% data reusables.enterprise-accounts.emu-more-info-account %}
+**Note:** If you're a member of an {% data variables.enterprise.prodname_emu_enterprise %}, any changes to your profile name must be made through your identity provider instead of {% data variables.product.prodname_dotcom %}. {% data reusables.enterprise-accounts.emu-more-info-account %}
 
 {% endnote %}
 {% endif %}
@@ -82,11 +76,7 @@ You can change the name that is displayed on your profile. This name may also be
 
 Add a bio to your profile to share information about yourself with other {% data variables.product.product_name %} users. With the help of [@mentions](/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) and emoji, you can include information about where you currently or have previously worked, what type of work you do, or even what kind of coffee you drink.
 
-{% ifversion fpt or ghes or ghec %}
-
 For a longer-form and more prominent way of displaying customized information about yourself, you can also use a profile README. For more information, see "[AUTOTITLE](/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme)."
-
-{% endif %}
 
 {% note %}
 
@@ -110,7 +100,7 @@ For a longer-form and more prominent way of displaying customized information ab
 
 ## Adding pronouns to your profile
 
-Add pronouns to your public user profile to share information about yourself with other {% data variables.product.product_name %} users. Your pronouns will only be visible to users that are signed in to {% data variables.product.product_name %}.
+Add pronouns to your public user profile to share information about yourself with other {% data variables.product.product_name %} users. {% data reusables.profile.pronouns-visibility %}
 
 {% data reusables.user-settings.access_settings %}
 1. Under **Pronouns**, add the pronouns that you want displayed on your profile. You may add custom pronouns.
@@ -152,6 +142,18 @@ You can add up to four links to social accounts on your profile. These are visib
 
 {% endif %}
 
+{% ifversion fpt or ghec %}
+
+## Adding your ORCID iD to your profile
+
+If you're a researcher with an ORCID iD, you can identify yourself by adding your ORCID iD to your profile.
+
+{% data reusables.user-settings.access_settings %}
+1. Under "ORCID iD", click **Connect your ORCID iD**.
+1. Follow the steps to sign in to your ORCID account and then return to {% data variables.product.prodname_dotcom %}.
+
+{% endif %}
+
 ## Setting a status
 
 You can set a status to display information about your current availability on {% data variables.product.product_name %}. Your status will show:
@@ -166,7 +168,7 @@ If you select the "Busy" option, when people @mention your username, assign you 
 
 ![Screenshot of a draft comment. "@octocat" is written in the text field, and "The Octocat (busy)" is suggested.](/assets/images/help/profile/username-with-limited-availability-text.png)
 
-1. In the top right corner of {% ifversion fpt or ghec %}{% data variables.product.prodname_dotcom_the_website %}{% else %}{% data variables.product.product_name %}{% endif %}, select your profile photo, then click {% octicon "smiley" aria-hidden="true" %} **Set status** or, if you already have a status set, click your current status.
+1. In the top right corner of {% data variables.product.prodname_dotcom %}, select your profile photo, then click {% octicon "smiley" aria-hidden="true" %} **Set status** or, if you already have a status set, click your current status.
 
 {% ifversion global-nav-update %}
 

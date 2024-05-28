@@ -23,7 +23,7 @@ import { allVersions } from '#src/versions/lib/all-versions.js'
 dotenv.config()
 
 // Create an object that maps the "short name" of a version to
-// all information about it. E.g
+// all information about it. E.g.
 //
 //   {
 //    'ghes-3.5': {
@@ -294,6 +294,19 @@ async function indexVersion(client, indexName, version, language, sourceDirector
   // CREATE INDEX
   const settings = {
     analysis: {
+      char_filter: {
+        // This will turn `runs-on` into `runs_on` so that it can't be
+        // tokenized to `runs` because `on` is a stop word.
+        // It also means that prose terms, in English, like `opt-in`
+        // not be matched if someone searches for `opt in`. But this
+        // is why we have multiple different analyzers. So it becomes
+        // `opt_in` in the `text_analyzer_explicit` analyzer, but is
+        // left as `opt` in the `text_analyzer` analyzer.
+        hyphenation_filter: {
+          type: 'mapping',
+          mappings: ['- => _'],
+        },
+      },
       analyzer: {
         // We defined to analyzers. Both based on a "common core" with the
         // `standard` tokenizer. But the second one adds Snowball filter.
@@ -306,6 +319,7 @@ async function indexVersion(client, indexName, version, language, sourceDirector
         // A great use-case of this when users search for keywords that are
         // code words like `dependency-name`.
         text_analyzer_explicit: {
+          char_filter: ['hyphenation_filter'],
           filter: ['lowercase', 'stop', 'asciifolding'],
           tokenizer: 'standard',
           type: 'custom',
@@ -355,12 +369,22 @@ async function indexVersion(client, indexName, version, language, sourceDirector
           // the searches faster.
           term_vector: 'with_positions_offsets',
         },
-        content_explicit: { type: 'text', analyzer: 'text_analyzer_explicit' },
+        content_explicit: {
+          type: 'text',
+          analyzer: 'text_analyzer_explicit',
+          // This is used for fast highlighting. Uses more space but makes
+          // the searches faster.
+          term_vector: 'with_positions_offsets',
+        },
         headings: { type: 'text', analyzer: 'text_analyzer', norms: false },
         headings_explicit: { type: 'text', analyzer: 'text_analyzer_explicit', norms: false },
         breadcrumbs: { type: 'text' },
         popularity: { type: 'float' },
         intro: { type: 'text' },
+        // Use 'keyword' because it's faster to index and (more importantly)
+        // faster to search on. It would be different if it was something
+        // users could type in into a text input.
+        toplevel: { type: 'keyword' },
       },
     },
     settings,
@@ -369,8 +393,9 @@ async function indexVersion(client, indexName, version, language, sourceDirector
   // POPULATE
   const allRecords = Object.values(records).sort((a, b) => b.popularity - a.popularity)
   const operations = allRecords.flatMap((doc) => {
-    const { title, objectID, content, breadcrumbs, headings, intro } = doc
+    const { title, objectID, content, breadcrumbs, headings, intro, toplevel } = doc
     const contentEscaped = escapeHTML(content)
+    const headingsEscaped = escapeHTML(headings)
     const record = {
       url: objectID,
       title,
@@ -378,8 +403,8 @@ async function indexVersion(client, indexName, version, language, sourceDirector
       content: contentEscaped,
       content_explicit: contentEscaped,
       breadcrumbs,
-      headings,
-      headings_explicit: headings,
+      headings: headingsEscaped,
+      headings_explicit: headingsEscaped,
       // This makes sure the popularities are always greater than 1.
       // Generally the 'popularity' is a ratio where the most popular
       // one of all is 1.0.
@@ -387,6 +412,7 @@ async function indexVersion(client, indexName, version, language, sourceDirector
       // you never get a product of 0.0.
       popularity: doc.popularity + 1,
       intro,
+      toplevel,
     }
     return [{ index: { _index: thisAlias } }, record]
   })
